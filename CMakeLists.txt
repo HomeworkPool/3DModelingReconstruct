@@ -13,10 +13,12 @@ include_directories(include)
 link_directories(lib/x64)
 
 ########### Link all resources ############
+message ("--\ Execute: Linking all resources ")
 execute_process(COMMAND cmd /C PreBuild.bat WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 ########### Project Source Settings ##############
 # Auto import all source files in the src directory
+message ("--\ Auto import all source files in the src directory")
 file(GLOB_RECURSE files src/*.cpp src/*.c)
 foreach (file ${files})
     string(REGEX REPLACE ".+/(.+)\\..*" "\\1" exe ${file})
