@@ -12,6 +12,9 @@ set(EXECUTABLE_OUTPUT_PATH bin/x64)
 include_directories(include)
 link_directories(lib/x64)
 
+########### Link all resources ############
+execute_process(COMMAND cmd /C PreBuild.bat WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
 ########### Project Source Settings ##############
 # Auto import all source files in the src directory
 file(GLOB_RECURSE files src/*.cpp src/*.c)
