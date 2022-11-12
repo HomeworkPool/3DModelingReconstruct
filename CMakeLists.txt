@@ -45,5 +45,11 @@ foreach (file ${files})
 endforeach ()
 
 ########### Link all resources ############
+get_filename_component(buildDirRelFilePath "${CMAKE_BINARY_DIR}"
+        REALPATH BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+file(RELATIVE_PATH buildDirRelFilePath "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}")
+
 message ("--\ Execute: Linking all resources ")
-execute_process(COMMAND cmd /C PreBuild.bat WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+#message ("\ --\ Current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+#message ("\ --\ Current output dir: ${CMAKE_BINARY_DIR}")
+execute_process(COMMAND cmd /C PreBuild.bat ${buildDirRelFilePath} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
