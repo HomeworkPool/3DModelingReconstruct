@@ -1,3 +1,7 @@
+/**
+ * 临位互换法全排列
+ */
+
 #include <iostream>
 #include <cstring>
 

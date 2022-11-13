@@ -1,3 +1,7 @@
+/**
+ * 字典序法全排列
+ */
+
 #include <iostream>
 #include <string.h>
 #include <stdio.h>

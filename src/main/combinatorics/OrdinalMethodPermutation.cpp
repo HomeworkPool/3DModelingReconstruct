@@ -1,6 +1,7 @@
-/*
-	序数法生成全排列
-*/
+/**
+ * 序数法生成全排列
+ */
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
