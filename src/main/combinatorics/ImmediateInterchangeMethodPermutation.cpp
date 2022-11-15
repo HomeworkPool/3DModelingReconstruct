@@ -1,5 +1,5 @@
 /**
- * 临位互换法全排列
+ * 邻位互换法全排列
  */
 
 #include <iostream>
@@ -27,6 +27,7 @@ int main() {
     char a[N];
     int n;
     cin >> a;
+
     n = strlen(a) - 1;
     permutation(a, 0, n);
     return 0;

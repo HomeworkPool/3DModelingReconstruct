@@ -6,33 +6,35 @@
 
 using namespace std;
 
-int check(float *sigema, int m) {
+int checkIn(const float *sigma, int m) {
     for (int i = 1; i <= m; i++) {
-        if (sigema[i] > 0) {
+        if (sigma[i] > 0) {
             return 0;
         }
     }
     return 1;
 }
 
-//此程序已经化为标准型的线性规划问题中,且默认有最优解
+
 int main(int argc, char *argv[]) {
     //数据输入部分
     int m, n;
-    cout << "请输入变量个数：";
+    cout << "Enter variable num:";
     cin >> m;
-    cout << "请输入不等式个数:";
+    cout << "Enter inequality num:";
     cin >> n;
-    float **matrix = new float *[n + 1];      //系数矩阵
+    auto **matrix = new float *[n + 1];      //系数矩阵
     for (int i = 1; i <= n; i++) {
         matrix[i] = new float[m + 2];
     }
-    float *cj = new float[m + 1];
-    float *cB = new float[n + 1];   //基变量系数
+
+    auto *cj = new float[m + 1];
+    auto *cB = new float[n + 1];   //基变量系数
     int *XB = new int[n + 1];   //用来标注基变量x的下标
-    float *b = new float[n + 1];
-    float *sigema = new float[n + 1];
-    float *sita = new float[n + 1];
+    auto *b = new float[n + 1];
+    auto *sigema = new float[n + 1];
+    auto *sita = new float[n + 1];
+
     //初始化
     for (int i = 0; i <= m; i++) {
         cj[i] = 0;
@@ -44,18 +46,18 @@ int main(int argc, char *argv[]) {
         sigema[i] = 0;
         sita[i] = 0;
     }
-    cout << "请输入目标函数系数(用空格间开)：" << endl;
+    cout << "Target function (spare with spaces): " << endl;
     for (int i = 1; i <= m; i++) {
         cin >> cj[i];
     }
-    cout << "请输入各不等式的系数和常量(用空格间开)：" << endl;
+    cout << "Enter consts for each inequality (spare with spaces): " << endl;
     for (int i = 1; i <= n; i++) {
-        cout << "不等式" << i << ": ";
+        cout << "inequality" << i << ": ";
         for (int j = 1; j <= m + 1; j++) {
             cin >> matrix[i][j];
         }
     }
-    cout << "请输入目标函数中基变量下标：" << endl;
+    cout << "Please enter the subscript of the base variable in the target function: " << endl;
     for (int i = 1; i <= n; i++) {
         cin >> XB[i];
         cB[i] = cj[XB[i]];
@@ -71,7 +73,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    while (check(sigema, m) == 0) {
+    while (checkIn(sigema, m) == 0) {
         //寻找入基变量
         float maxn = sigema[1];
         int sigema_xindex = 0;
@@ -149,7 +151,7 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i <= n; i++) {
         result[XB[i]] = b[i];
     }
-    cout << "最优解为：X = (";
+    cout << "The optimal solution is X = (";
     for (int i = 1; i < m; i++) {
         cout << result[i] << ",";
     }
@@ -157,6 +159,12 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i <= m; i++) {
         MaxZ += result[i] * cj[i];
     }
-    cout << "最优值为：MzxZ = " << MaxZ;
+    cout << "The optimal values are MaxZ = " << MaxZ;
+
+    for (int i = 1; i <= n; i++) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+
     return 0;
 }

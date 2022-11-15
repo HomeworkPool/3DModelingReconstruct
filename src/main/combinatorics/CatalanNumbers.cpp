@@ -2,21 +2,19 @@
  * 卡特兰数
  */
 
-#include <cstdlib>
-#include <iostream>
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 using namespace std;
 
-int ans[100];
+int ans[128];
 
-void mutil(int x) {
-    int yushu = 0;
+void mul(int x) {
+    int rem = 0;
     for (int i = 0; i < 100; i++) {
-        yushu += ans[i] * x;
-        ans[i] = yushu % 10000;
-        yushu /= 10000;
+        rem += ans[i] * x;
+        ans[i] = rem % 10000;
+        rem /= 10000;
     }
 }
 
@@ -34,18 +32,21 @@ int main(int argc, char *argv[]) {
     while (scanf("%d", &n) != EOF) {
         memset(ans, 0, sizeof(ans));
         ans[0] = 1;
+
         for (int i = 1; i <= n; i++) {
-            mutil(n + i);
+            mul(n + i);
             div(i);
         }
+
         div(n + 1);
         int j = 99;
         while (ans[j] == 0) j--;
         printf("%d", ans[j]);
         j--;
+
         for (int i = j; i >= 0; i--)
-            printf("%04d", ans[i]);
-        putchar(10);
+            printf("%08d ", ans[i]);
+        putchar(' ');
     }
     return 0;
 }
