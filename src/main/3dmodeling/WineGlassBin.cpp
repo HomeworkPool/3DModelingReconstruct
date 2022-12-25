@@ -23,7 +23,7 @@ int g_subdivMax = 10;
 #pragma pack(1)
 struct FILEHEADER {
     char dummy1[18];
-    int width;
+    int width;+
     int height;
     char dummy2[28];
 };

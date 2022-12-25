@@ -6,6 +6,10 @@ set(PROJECT_SOURCE_DIR src)
 set(EXECUTABLE_OUTPUT_PATH bin/x64)
 set(LIBRARY_OUTPUT_PATH lib/x64)
 
+# VCPKG Support
+set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        CACHE STRING "Vcpkg toolchain file")
+
 # add_executable(CppAlgoEnv main.cpp)
 
 if(NOT CMAKE_BUILD_TYPE)
