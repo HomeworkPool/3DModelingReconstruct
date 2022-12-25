@@ -12,6 +12,9 @@ ELSE()
     MESSAGE(WARNING "VCpkg not found. Please install vcpkg and set the environment variable VCPKG_ROOT")
 ENDIF()
 
+########### Begin Project ###########
+project(CppAlgoEnv)
+
 set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_SOURCE_DIR src)
 set(EXECUTABLE_OUTPUT_PATH bin/x64)
@@ -23,12 +26,13 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wa,-mbig-obj")
+endif()
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-
-########### Begin Project ###########
-project(CppAlgoEnv)
 
 ########### Local packages ############
 # Includes

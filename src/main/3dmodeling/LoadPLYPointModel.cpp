@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include <cstdio>
 #include <cmath>
+#define NDEBUG
 
 typedef struct VERTEX_3D {
     float x;
