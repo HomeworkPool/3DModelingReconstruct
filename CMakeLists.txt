@@ -1,14 +1,19 @@
-cmake_minimum_required(VERSION 3.23)
-project(CppAlgoEnv)
+cmake_minimum_required(VERSION 3.0)
+
+# VCPKG Support
+IF(DEFINED ENV{VCPKG_ROOT})
+    file(TO_CMAKE_PATH "$ENV{VCPKG_ROOT}" ENV_VCPKG_ROOT)
+    message ("--\ Enabling VCPKG support: ${ENV_VCPKG_ROOT}")
+    set(CMAKE_TOOLCHAIN_FILE "${ENV_VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            CACHE STRING "Vcpkg toolchain file")
+ELSE()
+    MESSAGE(WARNING "VCpkg not found. Please install vcpkg and set the environment variable VCPKG_ROOT")
+ENDIF()
 
 set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_SOURCE_DIR src)
 set(EXECUTABLE_OUTPUT_PATH bin/x64)
 set(LIBRARY_OUTPUT_PATH lib/x64)
-
-# VCPKG Support
-set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-        CACHE STRING "Vcpkg toolchain file")
 
 # add_executable(CppAlgoEnv main.cpp)
 
@@ -20,10 +25,14 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-########### OpenGL GLUT ############
+########### Begin Project ###########
+project(CppAlgoEnv)
+
+########### Local packages ############
 # Includes
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src/lib)
 link_directories(lib/x64 ${CMAKE_CURRENT_BINARY_DIR})
+include(${CMAKE_CURRENT_SOURCE_DIR}/packages.cmake)
 
 ########### Project Source Settings ##############
 # Auto import all source files in the src directory
@@ -42,6 +51,11 @@ SET_TARGET_PROPERTIES(CppAlgoEnvLibs PROPERTIES LINKER_LANGUAGE C
         OUTPUT_NAME "CppAlgoEnvLibs"
         PREFIX "")
 
+
+#########
+
+
+########### Project Source Settings ##############
 message ("\ --\ import all MAIN Entry source files in ${CMAKE_CURRENT_SOURCE_DIR}/src/main")
 
 file(GLOB_RECURSE files ${CMAKE_CURRENT_SOURCE_DIR}/src/main/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/main/*.c)
@@ -50,8 +64,8 @@ foreach (file ${files})
     add_executable (${exe} ${file})
 
     ########### Link libraries ############
-    # OpenGL GLUT
-    target_link_libraries(${exe} CppAlgoEnvLibs libfreeglut.a libfreeglut_static.a opengl32 glu32)
+    target_link_libraries(${exe} CppAlgoEnvLibs)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/target_link_libraries.cmake)
 
     message (\ \ \ \ --\ ${file}\ will\ be\ compiled\ to\ bin/${exe})
 endforeach ()
