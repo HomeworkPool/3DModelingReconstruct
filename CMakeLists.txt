@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 
 # VCPKG Support
+# 由于ENV_VCPKG_ROOT环境变量可能未设置，因此需要检测并发出警告
+# CMAKE_TOOLCHAIN_FILE 需要在project()之前设置
 IF(DEFINED ENV{VCPKG_ROOT})
     file(TO_CMAKE_PATH "$ENV{VCPKG_ROOT}" ENV_VCPKG_ROOT)
     message ("--\ Enabling VCPKG support: ${ENV_VCPKG_ROOT}")
