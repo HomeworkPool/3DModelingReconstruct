@@ -3,6 +3,7 @@
 #include <CGAL/Surface_mesh_default_triangulation_3.h>
 #include <CGAL/make_surface_mesh.h>
 #include <CGAL/Implicit_surface_3.h>
+#include <CGAL/Point_set_3.h>
 #include <CGAL/IO/facets_in_complex_2_to_triangle_mesh.h>
 #include <CGAL/Poisson_reconstruction_function.h>
 #include <CGAL/property_map.h>
@@ -12,6 +13,8 @@
 #include <boost/iterator/transform_iterator.hpp>
 #include <vector>
 #include <fstream>
+#include <CGAL/IO/output_surface_facets_to_polyhedron.h>
+#include <CGAL/remove_outliers.h>
 
 // Types
 typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
@@ -29,14 +32,26 @@ typedef CGAL::Surface_mesh_default_triangulation_3 STr;
 typedef CGAL::Surface_mesh_complex_2_in_triangulation_3<STr> C2t3;
 typedef CGAL::Implicit_surface_3<Kernel, Poisson_reconstruction_function> Surface_3;
 
-int main(void) {
+class iterator;
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "Simplify"
+
+int main() {
+    const bool usePlyOutput = false;
+
     // Poisson options
     FT sm_angle = 5.0; // Min triangle angle in degrees.
     FT sm_radius = 10; // Max triangle size w.r.t. point set average spacing. 30->10
-    FT sm_distance = 0.12; // Surface Approximation error w.r.t. point set average spacing.
+    FT sm_distance = 0.05; // Surface Approximation error w.r.t. point set average spacing.
     // Reads the point set file in points[].
     // Note: read_points() requires an iterator over points
     // + property maps to access each point's position and normal.
+
+    // Removes outliers using erase-remove idiom.
+    // The Identity_property_map property map can be omitted here as it is the default value.
+    const int nb_neighbors = 24; // considers 24 nearest neighbor points
+
     PointList points;
     if (!CGAL::IO::read_points(CGAL::data_file_path("buddha/cmvs-pc.ply"), std::back_inserter(points),
                                CGAL::parameters::point_map(Point_map())
@@ -44,6 +59,7 @@ int main(void) {
         std::cerr << "Error: cannot read file input file!" << std::endl;
         return EXIT_FAILURE;
     }
+
     // Creates implicit function from the read points using the default solver.
     // Note: this method requires an iterator over points
     // + property maps to access each point's position and normal.
@@ -56,6 +72,7 @@ int main(void) {
     FT average_spacing = CGAL::compute_average_spacing<CGAL::Sequential_tag>
             (points, 6 /* knn = 1 ring */,
              CGAL::parameters::point_map(Point_map()));
+
     // Gets one point inside the implicit surface
     // and computes implicit function bounding sphere radius.
     Point inner_point = function.get_inner_point();
@@ -74,6 +91,7 @@ int main(void) {
                                                         sm_distance * average_spacing); // Approximation error
     // Generates surface mesh with manifold option
     STr tr; // 3D Delaunay triangulation for surface mesh generation
+    // SurfaceMeshComplex_2InTriangulation_3, a class template from the Surface Mesh Generation package
     C2t3 c2t3(tr); // 2D complex in 3D Delaunay triangulation
     CGAL::make_surface_mesh(c2t3,                                 // reconstructed mesh
                             surface,                              // implicit surface
@@ -83,11 +101,20 @@ int main(void) {
         return EXIT_FAILURE;
     // saves reconstructed surface mesh
     std::stringstream fileNameStr;
-    fileNameStr << "buddha/poisson-mesh-" << sm_angle << "-" << sm_radius << "-" << sm_distance << ".off";
+    fileNameStr << "buddha/poisson-mesh-" << sm_angle << "-" << sm_radius << "-" << sm_distance;
+    if (usePlyOutput)
+        fileNameStr << ".ply";
+    else
+        fileNameStr << ".off";
 
     std::ofstream out(fileNameStr.str());
     Polyhedron output_mesh;
-    CGAL::facets_in_complex_2_to_triangle_mesh(c2t3, output_mesh);
+
+    if (usePlyOutput)
+        CGAL::output_surface_facets_to_polyhedron(c2t3, output_mesh);
+    else
+        CGAL::facets_in_complex_2_to_triangle_mesh(c2t3, output_mesh);
+
     out << output_mesh;
     // computes the approximation error of the reconstruction
     double max_dist =
@@ -101,3 +128,5 @@ int main(void) {
     std::cout << "Max distance to point_set: " << max_dist << std::endl;
     return EXIT_SUCCESS;
 }
+
+#pragma clang diagnostic pop

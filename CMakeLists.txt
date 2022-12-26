@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.2)
 
 # VCPKG Support
 # 由于ENV_VCPKG_ROOT环境变量可能未设置，因此需要检测并发出警告
@@ -15,7 +15,7 @@ ENDIF()
 ########### Begin Project ###########
 project(CppAlgoEnv)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(PROJECT_SOURCE_DIR src)
 set(EXECUTABLE_OUTPUT_PATH bin/x64)
 set(LIBRARY_OUTPUT_PATH lib/x64)
