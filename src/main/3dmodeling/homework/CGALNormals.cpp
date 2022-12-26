@@ -45,13 +45,13 @@ typedef CGAL::Parallel_if_available_tag Concurrency_tag;
 int main(int argc, char*argv[])
 {
     const std::string fname = (argc>1) ? argv[1] : CGAL::data_file_path("buddha/cmvs-pc-no-normals.ply");
-    // Reads a point set file in points[].
+    // Reads a point set baseDir in points[].
     std::list<PointVectorPair> points;
     if(!CGAL::IO::read_points(fname,
                               std::back_inserter(points),
                               CGAL::parameters::point_map(CGAL::First_of_pair_property_map<PointVectorPair>())))
     {
-        std::cerr << "Error: cannot read file " << fname<< std::endl;
+        std::cerr << "Error: cannot read baseDir " << fname<< std::endl;
         return EXIT_FAILURE;
     }
     // Estimates normals direction.

@@ -223,7 +223,7 @@ int main(int argc, char *argv[]) {
 
     printf("Tips: use 'w', 's', 'a', 'd', 'z', 'x', 'q', 'e' keys to control the model\n");
     if (argc < 2) {
-        printf("Input the file name (without postfix e.g. .ply) of points:");
+        printf("Input the baseDir name (without postfix e.g. .ply) of points:");
         scanf("%s", g_strModelName);
         strcat(g_strModelName, ".ply");
     } else {

@@ -4,7 +4,7 @@
 /*
  * freeglut.h
  *
- * The freeglut library include file
+ * The freeglut library include baseDir
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,

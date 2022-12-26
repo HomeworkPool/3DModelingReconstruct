@@ -35,12 +35,12 @@ typedef CGAL::Second_of_pair_property_map<Point_with_normal> Normal_map;
 
 int main(int argc, char *argv[]) {
     const std::string fname = (argc > 1) ? argv[1] : CGAL::data_file_path("buddha/cmvs-pc-chaos.ply");
-    // Reads a point set file in points[].
+    // Reads a point set baseDir in points[].
     // The Identity_property_map property map can be omitted here as it is the default value.
     std::vector<Point> points;
     if (!CGAL::IO::read_points(fname, std::back_inserter(points),
                                CGAL::parameters::point_map(CGAL::Identity_property_map<Point>()))) {
-        std::cerr << "Error: cannot read file " << fname << std::endl;
+        std::cerr << "Error: cannot read baseDir " << fname << std::endl;
         return EXIT_FAILURE;
     }
     // Removes outliers using erase-remove idiom.

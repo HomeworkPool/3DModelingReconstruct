@@ -44,7 +44,7 @@ int main() {
     FT sm_angle = 5.0; // Min triangle angle in degrees.
     FT sm_radius = 10; // Max triangle size w.r.t. point set average spacing. 30->10
     FT sm_distance = 0.05; // Surface Approximation error w.r.t. point set average spacing.
-    // Reads the point set file in points[].
+    // Reads the point set baseDir in points[].
     // Note: read_points() requires an iterator over points
     // + property maps to access each point's position and normal.
 
@@ -56,7 +56,7 @@ int main() {
     if (!CGAL::IO::read_points(CGAL::data_file_path("buddha/cmvs-pc.ply"), std::back_inserter(points),
                                CGAL::parameters::point_map(Point_map())
                                        .normal_map(Normal_map()))) {
-        std::cerr << "Error: cannot read file input file!" << std::endl;
+        std::cerr << "Error: cannot read baseDir input baseDir!" << std::endl;
         return EXIT_FAILURE;
     }
 

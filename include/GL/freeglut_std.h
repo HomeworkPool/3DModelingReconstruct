@@ -4,7 +4,7 @@
 /*
  * freeglut_std.h
  *
- * The GLUT-compatible part of the freeglut library include file
+ * The GLUT-compatible part of the freeglut library include baseDir
  *
  * Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
