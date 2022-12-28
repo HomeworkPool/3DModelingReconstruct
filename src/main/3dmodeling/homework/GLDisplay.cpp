@@ -32,7 +32,8 @@ float g_scale = 10.0f;
 
 const float g_lightPos[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-char g_strModelName[512] = "./buddha/poisson-mesh-5-10-0.05.ply"; /*Problem happens when left the [512] being empty []*/
+//char g_strModelName[512] = "./buddha/poisson-mesh-5-10-0.05.ply"; /*Problem happens when left the [512] being empty []*/
+char g_strModelName[512] = "./buddha/poisson-mesh-ascii.ply"; /*Problem happens when left the [512] being empty []*/
 int g_nVerticesNumber;//顶点数
 int g_nFacesNumber;//面数
 
@@ -118,19 +119,19 @@ void LoadMeshPLY(char *FileName) {
 
     //Read in the triangles
     for (i = 0; i < g_nVerticesNumber; i++) {
-        if (j == 3)
+        if (j == 3) {
             fscanf(fp, "%f %f %f", &g_vet[i].x, &g_vet[i].y, &g_vet[i].z);
-        else if (j == 6)
+        } else if (j == 6) {
             fscanf(fp, "%f %f %f %f %f %f", &g_vet[i].x, &g_vet[i].y, &g_vet[i].z, &g_norm[i].x, &g_norm[i].y,
                    &g_norm[i].z);
-        else if (j == 7)
-            fscanf(fp, "%f %f %f %f %f %f %f", &g_vet[i].x, &g_vet[i].y, &g_vet[i].z, &g_color[i].x, &g_color[i].y,
-                   &g_color[i].z, &alpha);
-        else if (j == 10)
+        } else if (j == 7) {
+            fscanf(fp, "%f %f %f %f %f %f %f", &g_vet[i].x, &g_vet[i].y, &g_vet[i].z, &g_norm[i].x, &g_norm[i].y,
+                   &g_norm[i].z, &alpha);
+        } else if (j == 10) {
             fscanf(fp, "%f %f %f %f %f %f %f %f %f %f", &g_vet[i].x, &g_vet[i].y, &g_vet[i].z,
                    &g_norm[i].x, &g_norm[i].y, &g_norm[i].z,
                    &g_color[i].x, &g_color[i].y, &g_color[i].z, &alpha);
-        else {
+        } else {
             printf("Warning: the viewer can't read the colors of models\n");
             exit(1);
         }
@@ -166,8 +167,10 @@ void DrawVertices() {
     int i;
 
     glEnable(GL_LIGHTING);
+    glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glPointSize(2.0);
-    glBegin(GL_TRIANGLES);
+    glLineWidth(1);
+
     for (i = 0; i < g_nFacesNumber; i++) {
         glBegin(GL_TRIANGLES);
 //glBegin();创建元素的类型，比如：点，线等。
@@ -197,7 +200,19 @@ void DrawVertices() {
 
         glEnd();
     }
-    //glEnd();
+
+
+    for (i = 0; i < g_nFacesNumber; i++) {
+        glBegin(GL_LINE_LOOP);
+        glColor3f(0.0, 0.0, 0.0);
+        glVertex3f(g_vet[triPatch[i].A].x, g_vet[triPatch[i].A].y, g_vet[triPatch[i].A].z);
+        glColor3f(0.0, 0.0, 0.0);
+        glVertex3f(g_vet[triPatch[i].B].x, g_vet[triPatch[i].B].y, g_vet[triPatch[i].B].z);
+        glColor3f(0.0, 0.0, 0.0);
+        glVertex3f(g_vet[triPatch[i].C].x, g_vet[triPatch[i].C].y, g_vet[triPatch[i].C].z);
+        glEnd();
+    }
+
 }
 
 static void resize(int width, int height) {
